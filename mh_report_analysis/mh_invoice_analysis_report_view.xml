@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+	    <menuitem name="MH Analysis Reports" id="menu_mh_analysis_report" sequence="100"/>
+			<menuitem name="Invoices" id="menu_mh_invoice_report" parent="menu_mh_analysis_report" sequence="20"/>
+	    
+		    
+	   <record id="view_mh_invoice_analysis_report_tree" model="ir.ui.view">
+			<field name="name">view.mh.invoice.analysis.report.tree</field>
+			<field name="model">mh.invoice.analysis.report</field>
+			<field name="arch" type="xml">
+				<tree create="false" string="Invoices Analysis">
+					<field name="year" invisible="1"/>
+					<field name="month" invisible="1" />
+					<field name="day" invisible="1" />
+					<field name="type" invisible="1" />
+					<field name="state" invisible="1" /> 
+					<field name="product_category" invisible="1" />
+					<field name="sale_person" invisible="1" />	       
+					<field name="partner_code" invisible="1" />
+					<field name="cust_name" invisible="1"/>
+					<field name="cust_so_name" invisible="1" />
+					<field name="product_code" invisible="1" />
+					<field name="product_full_name" invisible="1" />
+					<field name="product_qty" />
+					<field name="uom_name" />
+					<field name="price_average" />
+					<field name="price_total" />
+		    	</tree>
+			</field>
+	    </record>
+    
+    	<!-- 
+	    <record id="view_mh_invoice_analysis_report_pivot" model="ir.ui.view">
+	         <field name="name">view.mh.invoice.analysis.report.pivot</field>
+	         <field name="model">mh.invoice.analysis.report</field>
+	         <field name="arch" type="xml">
+	             <pivot string="Invoices Analysis" disable_linking="True">
+	                 <field name="product_category" type="row"/>
+	                 <field name="year" type="col"/>
+	                 <field name="price_total" type="measure"/>
+	             </pivot>
+	         </field>
+	    </record>
+	    -->
+	
+	    <record id="view_mh_invoice_analysis_report_graph" model="ir.ui.view">
+	         <field name="name">view.mh.invoice.analysis.report.graph</field>
+	         <field name="model">mh.invoice.analysis.report</field>
+	         <field name="arch" type="xml">
+	             <graph string="Invoices Analysis" type="pivot">
+	                 <field name="sale_person" type="row"/>
+	                 <field name="year" type="col"/>
+	                 <field name="price_total" type="measure"/>
+	             </graph>
+	         </field>
+	    </record>
+	
+	    <!-- Custom reports (aka filters) -->
+	    <record id="filter_invoice_customer" model="ir.filters">
+	        <field name="name">By Customer</field>
+	        <field name="model_id">mh.invoice.analysis.report</field>
+	        <field name="domain">[]</field>
+	        <field name="user_id" eval="False"/>
+	        <field name="context">{'group_by': ['date:month', 'cust_name']}</field>
+	    </record>
+	    <record id="filter_invoice_salespersons" model="ir.filters">
+	        <field name="name">By Salespersons</field>
+	        <field name="model_id">mh.invoice.analysis.report</field>
+	        <field name="domain">[]</field>
+	        <field name="user_id" eval="False"/>
+	        <field name="context">{'group_by': ['date:month', 'sale_person']}</field>
+	    </record>
+	    <record id="filter_invoice_product" model="ir.filters">
+	        <field name="name">By Product</field>
+	        <field name="model_id">mh.invoice.analysis.report</field>
+	        <field name="domain">[]</field>
+	        <field name="user_id" eval="False"/>
+	        <field name="context">{'group_by': ['date:month', 'product_full_name']}</field>
+	    </record>
+	    <record id="filter_invoice_product_category" model="ir.filters">
+	        <field name="name">By Product Category</field>
+	        <field name="model_id">mh.invoice.analysis.report</field>
+	        <field name="domain">[]</field>
+	        <field name="user_id" eval="False"/>
+	        <field name="context">{'group_by': ['date:month', 'product_category']}</field>
+	    </record>
+	
+	    <record id="view_mh_invoice_analysis_report_search" model="ir.ui.view">
+	        <field name="name">view.mh.invoice.analysis.report.search</field>
+	        <field name="model">mh.invoice.analysis.report</field>
+	        <field name="arch" type="xml">
+	            <search string="Invoices Analysis">
+	                <field name="date"/>
+	                <filter string="This Year" name="thisyear" domain="['|', ('date', '=', False), '&amp;',('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]" help="Journal invoices with period in current year"/>
+	                <separator/>
+	                <filter string="Invoice" domain="['|', ('type','=','out_invoice'),('type','=','in_invoice')]"/>
+	                <filter string="Refund" domain="['|', ('type','=','out_refund'),('type','=','in_refund')]"/>
+	                <field name="cust_name" />
+	                <field name="sale_person" />
+	                <field name="product_category"/>
+	                <group expand="1" string="Group By">
+	                    <filter string="Customer" name="cust_name" context="{'group_by':'cust_name'}"/>
+	                    <filter string="Salesperson" name='sale_person' context="{'group_by':'sale_person'}"/>
+	                    <filter string="Product Category" name="product_category" context="{'group_by':'product_category'}"/>
+	                    <filter string="Status" context="{'group_by':'state'}"/>
+	                    <separator orientation="vertical" />
+	                    <filter string="Date" context="{'group_by':'date'}"/>
+	                </group>
+	            </search>
+	        </field>
+	    </record>
+	
+	    <record id="action_mh_invoice_analysis_report" model="ir.actions.act_window">
+	        <field name="name">Invoices Analysis</field>
+	        <field name="res_model">mh.invoice.analysis.report</field>
+	        <field name="view_type">form</field>
+	        <field name="view_mode">tree,graph</field>
+        	<field name="context">{'group_by':[], 'group_by_no_leaf':1, 'search_default_thisyear': 1}</field>
+	        <field name="search_view_id" ref="view_mh_invoice_analysis_report_search"/>
+	    </record>
+		
+	    <menuitem name="Invoices Analysis" action="action_mh_invoice_analysis_report" id="menu_mh_invoice_analysis_report" parent="menu_mh_invoice_report" sequence="20"/>
+
+    </data>
+</openerp>
