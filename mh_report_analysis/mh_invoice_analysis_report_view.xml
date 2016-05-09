@@ -50,8 +50,6 @@
 	         <field name="model">mh.invoice.analysis.report</field>
 	         <field name="arch" type="xml">
 	             <graph string="Invoices Analysis" type="pivot">
-	                 <field name="sale_person" type="row"/>
-	                 <field name="year" type="col"/>
 	                 <field name="price_total" type="measure"/>
 	             </graph>
 	         </field>
