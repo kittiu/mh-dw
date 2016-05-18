@@ -15,18 +15,18 @@
 					<field name="month" invisible="1" />
 					<field name="day" invisible="1" />
 					<field name="type" invisible="1" />
-					<field name="state" invisible="1" /> 
-					<field name="product_category" invisible="1" />
-					<field name="sale_person" invisible="1" />	       
-					<field name="partner_code" invisible="1" />
-					<field name="cust_name" invisible="1"/>
+					<field name="product_category" invisible="0" />
+					<field name="product_full_name" invisible="0" />
+					<field name="sale_person" invisible="0" />	       
+					<field name="partner_code" invisible="0" />
+					<field name="cust_name" invisible="0"/>
 					<field name="cust_so_name" invisible="1" />
 					<field name="product_code" invisible="1" />
-					<field name="product_full_name" invisible="1" />
 					<field name="product_qty" />
 					<field name="uom_name" />
 					<field name="price_average" />
 					<field name="price_total" />
+					<field name="state" invisible="1" /> 
 		    	</tree>
 			</field>
 	    </record>
@@ -97,7 +97,9 @@
 	                <filter string="Refund" domain="['|', ('type','=','out_refund'),('type','=','in_refund')]"/>
 	                <field name="cust_name" />
 	                <field name="sale_person" />
-	                <field name="product_category"/>
+	                <field name="product_category" />
+	                <field name="partner_code" />
+	                <field name="product_code" />
 	                <group expand="1" string="Group By">
 	                    <filter string="Customer" name="cust_name" context="{'group_by':'cust_name'}"/>
 	                    <filter string="Salesperson" name='sale_person' context="{'group_by':'sale_person'}"/>
@@ -115,7 +117,7 @@
 	        <field name="res_model">mh.invoice.analysis.report</field>
 	        <field name="view_type">form</field>
 	        <field name="view_mode">tree,graph</field>
-        	<field name="context">{'group_by':[], 'group_by_no_leaf':1, 'search_default_thisyear': 1}</field>
+        	<field name="context">{'group_by':[], 'group_by_no_leaf':0, 'search_default_thisyear': 1}</field>
 	        <field name="search_view_id" ref="view_mh_invoice_analysis_report_search"/>
 	    </record>
 		
