@@ -35,6 +35,13 @@ class MHInvoiceAnalysisReport(models.Model):
     ]
 
     id = fields.Integer(string='ID')
+    vat_type = fields.Selection(
+        [('vat', 'VAT'),
+         ('novat', 'NO-VAT'),
+         ('mh_novat', 'MH-NO-VAT'),
+         ('undefined', 'n/a')],
+        string='VAT Type',
+    )
     date = fields.Date(string='Date')
     year = fields.Char(string='Year')
     month = fields.Char(string='Month')
